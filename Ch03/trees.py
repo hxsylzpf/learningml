@@ -1,3 +1,4 @@
+#coding:utf-8
 '''
 Created on Oct 12, 2010
 Decision Tree Source Code for Machine Learning in Action Ch. 3
@@ -6,6 +7,8 @@ Decision Tree Source Code for Machine Learning in Action Ch. 3
 from math import log
 import operator
 
+
+#创建数据集合[返回数据集和类标签]
 def createDataSet():
     dataSet = [[1, 1, 'yes'],
                [1, 1, 'yes'],
@@ -16,6 +19,8 @@ def createDataSet():
     #change to discrete values
     return dataSet, labels
 
+
+#
 def calcShannonEnt(dataSet):
     numEntries = len(dataSet)
     labelCounts = {}
@@ -26,9 +31,10 @@ def calcShannonEnt(dataSet):
     shannonEnt = 0.0
     for key in labelCounts:
         prob = float(labelCounts[key])/numEntries
-        shannonEnt -= prob * log(prob,2) #log base 2
+        shannonEnt -= prob * log(prob,2) #log base 2 以2为底，prob的对数乘以prob
     return shannonEnt
-    
+ 
+ #分割数据   
 def splitDataSet(dataSet, axis, value):
     retDataSet = []
     for featVec in dataSet:
@@ -37,7 +43,8 @@ def splitDataSet(dataSet, axis, value):
             reducedFeatVec.extend(featVec[axis+1:])
             retDataSet.append(reducedFeatVec)
     return retDataSet
-    
+
+#选择最佳特征进行数据分离    
 def chooseBestFeatureToSplit(dataSet):
     numFeatures = len(dataSet[0]) - 1      #the last column is used for the labels
     baseEntropy = calcShannonEnt(dataSet)

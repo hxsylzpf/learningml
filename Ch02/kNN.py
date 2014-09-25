@@ -47,6 +47,8 @@ def createDataSet():
     return group, labels
 
 
+
+#文件2矩阵
 def file2matrix(filename):
     fr = open(filename)
     numberOfLines = len(fr.readlines())         #get the number of lines in the file(获得文件的行数)
@@ -74,20 +76,24 @@ def autoNorm(dataSet):
     normDataSet = normDataSet/tile(ranges, (m,1))   #element wise divide
     return normDataSet, ranges, minVals
    
+ #约会测试  
 def datingClassTest():
-    hoRatio = 0.50      #hold out 10%
-    datingDataMat,datingLabels = file2matrix('datingTestSet2.txt')       #load data setfrom file
+    hoRatio = 0.50      #hold out 10% 提取1/10
+    datingDataMat,datingLabels = file2matrix('datingTestSet2.txt')       #load data setfrom file从文件导入数据
     normMat, ranges, minVals = autoNorm(datingDataMat)
     m = normMat.shape[0]
     numTestVecs = int(m*hoRatio)
     errorCount = 0.0
     for i in range(numTestVecs):
         classifierResult = classify0(normMat[i,:],normMat[numTestVecs:m,:],datingLabels[numTestVecs:m],3)
-        print "the classifier came back with: %d, the real answer is: %d" % (classifierResult, datingLabels[i])
+        print u"分类器判断为: %d, 真实答案为: %d" % (classifierResult, datingLabels[i])
         if (classifierResult != datingLabels[i]): errorCount += 1.0
-    print "the total error rate is: %f" % (errorCount/float(numTestVecs))
+    print u"判断错误率为: %f" % (errorCount/float(numTestVecs))
     print errorCount
-    
+ 
+
+
+ #图片2向量   
 def img2vector(filename):
     returnVect = zeros((1,1024))
     fr = open(filename)
@@ -97,6 +103,8 @@ def img2vector(filename):
             returnVect[0,32*i+j] = int(lineStr[j])
     return returnVect
 
+
+#手写数字测试
 def handwritingClassTest():
     hwLabels = []
     trainingFileList = listdir('trainingDigits')           #load the training set
@@ -117,7 +125,7 @@ def handwritingClassTest():
         classNumStr = int(fileStr.split('_')[0])
         vectorUnderTest = img2vector('testDigits/%s' % fileNameStr)
         classifierResult = classify0(vectorUnderTest, trainingMat, hwLabels, 3)
-        print "the classifier came back with: %d, the real answer is: %d" % (classifierResult, classNumStr)
+        print u"分类器判断为: %d, 真实答案为: %d" % (classifierResult, classNumStr)
         if (classifierResult != classNumStr): errorCount += 1.0
-    print "\nthe total number of errors is: %d" % errorCount
-    print "\nthe total error rate is: %f" % (errorCount/float(mTest))
+    print u"\n判断错误总数: %d" % errorCount
+    print u"\n判断错误率: %f" % (errorCount/float(mTest))
